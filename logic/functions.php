@@ -2,7 +2,7 @@
 include_once 'config.php';
 
 function getAllBooks($mysqli){
-    $sql = 'SELECT * FROM libri;';
+    $sql = 'SELECT libri.*, generi_letterari.nome as genere FROM libri INNER JOIN generi_letterari ON libri.genere_id = generi_letterari.id;';
     $books = [];
     $res = $mysqli->query($sql);
     if($res) {
@@ -16,7 +16,7 @@ function getAllBooks($mysqli){
 
 // crea libro
 function createBook($mysqli, $titolo, $autore, $anno_pubb, $genere){
-    $sql = "INSERT INTO libri (titolo, autore, anno_pubblicazione, genere)
+    $sql = "INSERT INTO libri (titolo, autore, anno_pubblicazione, genere_id)
         VALUES ('$titolo', '$autore', '$anno_pubb', '$genere')";
 
 if(!$mysqli->query($sql)) { die($mysqli->connect_error); }
@@ -40,4 +40,17 @@ function updateBook($mysqli, $id, $titolo, $autore, $anno_pubb, $genere){
         WHERE id = " . $id;
     if(!$mysqli->query($sql)){ echo($mysqli->connect_error); }
     else { echo 'Libro modificato con successo!!!';}
+}
+
+// selezione dei generi letterari
+function getGenres($mysqli){
+    $sql = 'SELECT * FROM generi_letterari';
+    $result = [];
+    $res = $mysqli->query($sql);
+    if($res){
+        while($row = $res->fetch_assoc()){
+            array_push($result, $row);
+        }
+    }
+    return $result;
 }

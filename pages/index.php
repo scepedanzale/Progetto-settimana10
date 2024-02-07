@@ -2,56 +2,75 @@
 <?php include_once 'navbar.php' ?>
 <?php include_once '../logic/functions.php' ?>
 
-<h1 class="m-5">Cielo's Books</h1>
-<div class="container p-3 bg-secondary rounded-4">
-    <form action="../logic/controller.php" method="POST" class="text-center">
-        <div class="mb-3">
-            <input type="text" name="titolo" class="form-control" placeholder="titolo..." required minlength="1">
-        </div>
-        <div class="mb-3">
-            <input type="text" name="autore" class="form-control" placeholder="autore..." required minlength="2">
-        </div>
-        <div class="mb-3">
-            <input type="number" name="anno_pubb" class="form-control" placeholder="anno di pubblicazione..." required>
-        </div>
-        <div class="mb-3">
-            <input type="text" name="genere" class="form-control" placeholder="genere..." required>
-        </div>
-        <button type="submit" class="btn btn-outline-light w-50">Inserisci</button>
-    </form>
+
+<div class="container p-3 text-center">
+
+    <button class="btn violet-bg my-3 w-50" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+        <span class>Aggiungi un nuovo libro</span>
+    </button>
+    <div class="collapse" id="collapseExample">
+        <form action="../logic/controller.php" method="POST" class="text-center">
+        <div class="input-group mb-3">
+                <input type="text" id="titolo" name="titolo" class="form-control" placeholder="titolo..." required minlength="1">
+            </div>
+            <div class="input-group mb-3">
+                <input type="text" name="autore" class="form-control" placeholder="autore..." required minlength="2">
+            </div>
+            <div class="input-group mb-3">
+                <input type="number" name="anno_pubb" class="form-control" placeholder="anno di pubblicazione..." required>
+            </div>
+            <div class="input-group mb-3">
+                <select name='genere' id="" class="form-control">
+                    <option value="">genere...</option>
+                    <?php
+                        $generi = getGenres($mysqli);
+                        if($generi){
+                            foreach($generi as $key => $genere){
+                                echo "<option value='{$genere['id']}'>{$genere['nome']}</option>";
+                            }
+                        }
+                    ?>
+                </select>
+            </div>
+            <div class="mb-3 text-center">
+                <button type="submit" class="btn w-50 green-bg">Inserisci</button>
+            </div>
+        </form>
+    </div>
 </div>
-<div class="container-fluid p-5">
-   
-        <?php
-            $libri = getAllBooks($mysqli);
-            if($libri){?>
-                <table class="table table-secondary table-striped">
-                    <tr class="text-center">
-                        <th>Titolo</th>
-                        <th>Autore</th>
-                        <th>Anno di Pubblicazione</th>
-                        <th>Genere</th>
-                        <th></th>
-                    </tr>
-                    <?php foreach($libri as $key => $book){?>
-                        <tr>
-                            <td><?=$book['titolo']?></td>
-                            <td><?=$book['autore']?></td>
-                            <td class="text-center"><?=$book['anno_pubblicazione']?></td>
-                            <td><?=$book['genere']?></td>
-                            <td>
-                                <a href="../logic/controller.php?action=delete&id=<?= $book['id'] ?>" class="btn btn-outline-dark my-1" role="button"><i class="bi bi-trash"></i></a>
-                                <a href="update.php?action=update&id=<?= $book['id'] ?>" class="btn btn-outline-dark my-1"><i class="bi bi-pencil"></i></a>
-                            </td>
-                        </tr>
+
+
+
+<div class="container-fluid table ">
+   <div class="row">
+       <?php
+           $libri = getAllBooks($mysqli);
+           if($libri){?>
+               <?php foreach($libri as $key => $book){?>
+                <div class="col-6 my-3">
+                    <div class="card border-violet">
+                        <div class="card-body">
+                            <h5 class="card-title no-br"><nobr><?=$book['titolo']?></nobr></h5>
+                            <p class="card-text no-br"><nobr>Author: <?=$book['autore']?></nobr></p>
+                            <p class="card-text no-br"><nobr>Year: <?=$book['anno_pubblicazione']?></nobr></p>
+                            <p class="card-text no-br"><nobr>Genre: <?=$book['genere']?></nobr></p>
+                            <a href="../logic/controller.php?action=delete&id=<?= $book['id'] ?>" class=" my-1" role="button"><i class="bi bi-trash"></i></a>
+                            <a href="update.php?action=update&id=<?= $book['id'] ?>" class=" my-1"><i class="bi bi-pencil"></i></a>
+                        </div>
+                    </div>
+                </div>
                 <?php } ?>
-
-                </table>
+                
+            </table>
             <?php } ?>
-</div>
+        </div>
+    </div>
 
-<?php include_once 'footer.php' ?>
-
+    <?php include_once 'footer.php' ?>
+            
+            
+    
+    
 
 
 

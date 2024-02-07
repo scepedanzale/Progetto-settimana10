@@ -13,7 +13,8 @@
 ?>
 
 <h1 class="my-3 mx-5">Modifica Libro</h1>
-<div class="container p-3 bg-secondary rounded-4">
+
+<div class="container p-3 ">
     <form action="../logic/controller.php?action=update&id=<?=$result['id']?>" method="POST" class="">
         <div class="input-group mb-3">
             <div class="input-group-text">Titolo</div>
@@ -32,7 +33,7 @@
             <input type="text" value=<?=$result['genere']?> name="genere" class="form-control" placeholder="genere..." required>
         </div>
         <div class="mb-3 text-center">
-            <button type="submit" class="btn btn-outline-light w-50">Modifica</button>
+            <button type="submit" class="btn green-bg w-50">Modifica</button>
         </div>
     </form>
 </div>

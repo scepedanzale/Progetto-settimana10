@@ -1,0 +1,50 @@
+.violet-bg{
+    background-color: rgb(83, 42, 122);
+    color: white;
+}
+button.violet-bg:hover, .border-violet{
+    border: 1px solid rgb(83, 42, 122);
+    color: rgb(83, 42, 122);
+    background-color: white;
+}
+
+.no-br{
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+a, button{
+    letter-spacing: 1px;
+}
+
+p{
+    margin: 0;
+}
+
+h1{
+    color: rgb(83, 42, 122);
+    letter-spacing: 1px;
+}
+
+
+/* navbar */
+.navbar-brand:hover, .nav-link:hover{
+    color: rgb(54, 196, 29) !important;
+}
+.green-bg{
+    background-color: rgb(54, 196, 29);
+    color: white;
+}
+.green-bg:hover{
+    border: 1px solid rgb(54, 196, 29);
+    color: rgb(54, 196, 29);
+    background-color: white;
+}
+
+.card i{
+    color: rgb(83, 42, 122); 
+    font-size: 1.4em;
+}
+.card i:hover{
+    color: rgb(54, 196, 29); 
+}
