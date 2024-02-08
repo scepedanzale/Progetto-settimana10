@@ -7,10 +7,10 @@
     </div>
     <ul class="navbar-nav">
       <li class="nav-item">
-        <a class="nav-link text-light" aria-current="page" href="">Register</a>
+        <a class="nav-link text-light" aria-current="page" href="register.php">Register</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-light" aria-current="page" href="">Login</a>
+        <a class="nav-link text-light" aria-current="page" href="login.php">Login</a>
       </li>
     </ul>
   </div>

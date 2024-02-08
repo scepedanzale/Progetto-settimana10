@@ -1,10 +1,10 @@
 <?php include_once 'header.php' ?>
 <?php include_once 'navbar.php' ?>
-<?php require_once '../logic/config.php' ?>
+<?php require_once 'logic/config.php' ?>
 
 <?php
 
-    $sql = 'SELECT * FROM libri WHERE id=' . $_REQUEST['id'];
+    $sql = 'SELECT libri.*, generi_letterari.nome as genere FROM libri INNER JOIN generi_letterari ON libri.genere_id = generi_letterari.id  WHERE libri.id=' . $_REQUEST['id'];
    
     $response = $mysqli->query($sql);
     if($response){
@@ -15,7 +15,7 @@
 <h1 class="my-3 mx-5">Modifica Libro</h1>
 
 <div class="container p-3 ">
-    <form action="../logic/controller.php?action=update&id=<?=$result['id']?>" method="POST" class="">
+    <form action="logic/controller.php?action=update&id=<?=$result['id']?>" method="POST" class="">
         <div class="input-group mb-3">
             <div class="input-group-text">Titolo</div>
             <input type="text" id="titolo" value=<?=$result['titolo']?> name="titolo" class="form-control" placeholder="titolo..." required minlength="1">

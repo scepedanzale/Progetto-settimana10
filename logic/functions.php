@@ -20,7 +20,7 @@ function createBook($mysqli, $titolo, $autore, $anno_pubb, $genere){
         VALUES ('$titolo', '$autore', '$anno_pubb', '$genere')";
 
 if(!$mysqli->query($sql)) { die($mysqli->connect_error); }
-header('Location: ../pages/index.php');
+header('Location: ../index.php');
 }
 
 // elimina libro
