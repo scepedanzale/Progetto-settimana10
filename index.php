@@ -1,6 +1,14 @@
 <?php include_once 'header.php' ?>
 <?php include_once 'navbar.php' ?>
-<?php include_once 'logic/functions.php' ?>
+<?php include_once 'functions.php' ?>
+
+<?php
+
+    session_start();
+    if(!isset($_SESSION['userLogin'])){
+        exit(header('Location: login.php'));
+    }
+?>
 
 
 <div class="container p-3 text-center">
@@ -9,7 +17,7 @@
         <span class>Aggiungi un nuovo libro</span>
     </button>
     <div class="collapse" id="collapseExample">
-        <form action="logic/controller.php?action=create" method="POST" class="text-center">
+        <form action="controller.php?action=create" method="POST" class="text-center">
         <div class="input-group mb-3">
                 <input type="text" id="titolo" name="titolo" class="form-control" placeholder="titolo..." required minlength="1">
             </div>
@@ -49,19 +57,18 @@
                <?php foreach($libri as $key => $book){?>
                 <div class="col-6 my-3">
                     <div class="card border-violet">
+                        <img src="<?=$book['img']?>" class="card-img-top" alt="">
                         <div class="card-body">
                             <h5 class="card-title no-br"><nobr><?=$book['titolo']?></nobr></h5>
                             <p class="card-text no-br"><nobr>Author: <?=$book['autore']?></nobr></p>
                             <p class="card-text no-br"><nobr>Year: <?=$book['anno_pubblicazione']?></nobr></p>
                             <p class="card-text no-br"><nobr>Genre: <?=$book['genere']?></nobr></p>
-                            <a href="logic/controller.php?action=delete&id=<?= $book['id'] ?>" class=" my-1" role="button"><i class="bi bi-trash"></i></a>
+                            <a href="controller.php?action=delete&id=<?= $book['id'] ?>" class=" my-1" role="button"><i class="bi bi-trash"></i></a>
                             <a href="update.php?action=update&id=<?= $book['id'] ?>" class=" my-1"><i class="bi bi-pencil"></i></a>
                         </div>
                     </div>
                 </div>
                 <?php } ?>
-                
-            </table>
             <?php } ?>
         </div>
     </div>

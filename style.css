@@ -21,15 +21,13 @@ p{
     margin: 0;
 }
 
-h1{
+h1, h3{
     color: rgb(83, 42, 122);
     letter-spacing: 1px;
 }
-
-
-/* navbar */
-.navbar-brand:hover, .nav-link:hover{
-    color: rgb(54, 196, 29) !important;
+.soft-green-bg{
+    background-color: rgba(54, 196, 29, 0.302);
+    color: rgb(0, 0, 0);
 }
 .green-bg{
     background-color: rgb(54, 196, 29);
@@ -41,10 +39,21 @@ h1{
     background-color: white;
 }
 
-.card i{
+
+/* navbar */
+.navbar-brand:hover, .nav-link:hover{
+    color: rgb(54, 196, 29) !important;
+}
+
+.card i, .bi-gear{
     color: rgb(83, 42, 122); 
     font-size: 1.4em;
 }
-.card i:hover{
+.card i:hover, .bi-gear:hover{
     color: rgb(54, 196, 29); 
+}
+
+.soft-violet-bg:hover{
+    background-color: rgba(83, 42, 122, 0.302);
+    color: rgb(0, 0, 0);
 }

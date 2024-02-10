@@ -1,6 +1,7 @@
 <?php include_once 'header.php' ?>
 <?php include_once 'navbar.php' ?>
-<?php require_once 'logic/config.php' ?>
+<?php require_once 'config.php' ?>
+<?php require_once 'functions.php' ?>
 
 <?php
 
@@ -15,7 +16,7 @@
 <h1 class="my-3 mx-5">Modifica Libro</h1>
 
 <div class="container p-3 ">
-    <form action="logic/controller.php?action=update&id=<?=$result['id']?>" method="POST" class="">
+    <form action="controller.php?action=update&id=<?=$result['id']?>" method="POST" class="">
         <div class="input-group mb-3">
             <div class="input-group-text">Titolo</div>
             <input type="text" id="titolo" value=<?=$result['titolo']?> name="titolo" class="form-control" placeholder="titolo..." required minlength="1">
@@ -30,13 +31,26 @@
         </div>
         <div class="input-group mb-3">
             <div class="input-group-text">Genere</div>
-            <input type="text" value=<?=$result['genere']?> name="genere" class="form-control" placeholder="genere..." required>
+            <select name='genere' id="" class="form-control">
+                    <option value=<?=$result['genere_id']?>><?=$result['genere']?></option>
+                    <?php
+                        $generi = getGenres($mysqli);
+                        if($generi){
+                            foreach($generi as $key => $genere){
+                                if($genere['nome']!==$result['genere']){
+                                    echo "<option value='{$genere['id']}'>{$genere['nome']}</option>";
+                                }
+                            }
+                        }
+                    ?>
+                </select>
         </div>
         <div class="mb-3 text-center">
             <button type="submit" class="btn green-bg w-50">Modifica</button>
         </div>
     </form>
 </div>
+
 
 
 
