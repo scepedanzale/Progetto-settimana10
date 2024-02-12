@@ -56,32 +56,32 @@ if(isset($_REQUEST['action']) && $_REQUEST['action'] === 'addUser') {
     $pass = $matchesPass ? htmlspecialchars($_REQUEST['password']) : exit(); 
     $password = password_hash($pass , PASSWORD_DEFAULT);
 
-    addUser($mysqli, $nome, $cognome, $telefono, $email, $password, $img);
-    include_once 'mail.php';
-    
+    addUser($mysqli, $nome, $cognome, $telefono, $email, $password, $img); 
+    include_once 'mail.php';  // invia mail
 
 }else if(isset($_REQUEST['action']) && $_REQUEST['action'] === 'updateUserData') { 
     // modifica dati personali
     $target_dir = 'usersImg/';
 
-    $id = $_REQUEST['id'];
     $nome = strlen(htmlspecialchars(trim($_REQUEST['nome']))) > 1 ? htmlspecialchars(trim($_REQUEST['nome'])) : exit();
     $cognome = strlen(htmlspecialchars(trim($_REQUEST['cognome']))) > 1 ? htmlspecialchars(trim($_REQUEST['cognome'])) : exit(); 
-
+    
     $regexTel = '/(?:([+]\d{1,4})[-.\s]?)?(?:[(](\d{1,3})[)][-.\s]?)?(\d{1,4})[-.\s]?(\d{1,4})[-.\s]?(\d{1,9})/';
     preg_match_all($regexTel, htmlspecialchars($_REQUEST['telefono']), $matchesTel, PREG_SET_ORDER, 0);
     $regexEmail = '/^((?!\.)[\w\-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/m';
     preg_match_all($regexEmail, htmlspecialchars($_REQUEST['email']), $matchesEmail, PREG_SET_ORDER, 0);
-
+    
     $telefono = $matchesTel ? htmlspecialchars($_REQUEST['telefono']) : exit();
     echo $telefono . '<br>';
     $email = $matchesEmail ? htmlspecialchars($_REQUEST['email']) : exit();
     echo $email . '<br>';
-
+    
+    // id e password rimangono gli stessi
+    $id = $_SESSION['userLogin']['id'];
     $password = $_SESSION['userLogin']['password'];
 
-    $img = $_REQUEST['userImg'];
-    if($img !== $target_dir.'default.png'){
+    $img = $_SESSION['userLogin']['img'];
+    if($img !== $target_dir.'default.png'){ // se l'immagine dell'utente è diversa da quella di default, rinominala con il nuovo nome utente
         $nuovoNomeImg = $target_dir . str_replace(' ', '', $nome) . '-' . str_replace(' ', '', $cognome);
         $img = rename($img, $nuovoNomeImg) ? $nuovoNomeImg : exit();
     }
@@ -95,8 +95,8 @@ if(isset($_REQUEST['action']) && $_REQUEST['action'] === 'addUser') {
         'password' => $password, 
         'img' => $img
     ];
+     // elimina la vecchia sessione e ricreala
     session_unset();
-
     $_SESSION['userLogin'] = $newUser;
 
     updateUserData($mysqli, $id, $nome, $cognome, $telefono, $email, $img);
@@ -105,26 +105,24 @@ if(isset($_REQUEST['action']) && $_REQUEST['action'] === 'addUser') {
 }else if(isset($_REQUEST['action']) && $_REQUEST['action'] === 'updateUserImg') {
     // modifica immagine utente
     $target_dir = 'usersImg/';
-    $img = $_REQUEST['userImg'];
+    $img = $_SESSION['userLogin']['img'];
 
     if(!empty($_FILES['image'])) {
         if($_FILES['image']["type"] === 'image/png' || $_FILES['image']["type"] === 'image/jpg' || $_FILES['image']["type"] === 'image/jpeg') {
             if($_FILES['image']["size"] < 4000000) {
                 if(is_uploaded_file($_FILES['image']["tmp_name"]) && $_FILES['image']["error"] === UPLOAD_ERR_OK) {
-                    
-                    
-                    if (file_exists($img)) {
-                        if($img === $target_dir.'default.png'){
-                            if(move_uploaded_file($_FILES['image']["tmp_name"], $target_dir.str_replace(' ', '', $_REQUEST['userName']) .'-'.str_replace(' ', '', $_REQUEST['userSurname']))) {
-                                $img = $target_dir.str_replace(' ', '', $_REQUEST['userName']) .'-'.str_replace(' ', '', $_REQUEST['userSurname']);
-                                updateUserImg($mysqli, $_REQUEST['id'], $img);
-                                $_SESSION['userLogin']['img'] = $img;
+                    if(file_exists($img)) {
+                        if($img === $target_dir.'default.png'){ // se la vecchia immagine è quella di default, creane una nuova con nuovo nome
+                            if(move_uploaded_file($_FILES['image']["tmp_name"], $target_dir.str_replace(' ', '', $_SESSION['userLogin']['nome']) .'-'.str_replace(' ', '', $_SESSION['userLogin']['cognome']))) {
+                                $img = $target_dir.str_replace(' ', '', $_SESSION['userLogin']['nome']) .'-'.str_replace(' ', '', $_SESSION['userLogin']['cognome']);
+                                updateUserImg($mysqli, $_SESSION['userLogin']['id'], $img);
+                                $_SESSION['userLogin']['img'] = $img;  // sovrascrivi immagine nella sessione
                                 exit(header('Location: profile.php'));
                                 echo 'Caricamento avvenuto con successo';
                             } else {
                                 echo 'Errore!!!';
                             }
-                        }else if (unlink($img)) { // Elimina il file precedente, se esiste
+                        }else if (unlink($img)) { // se l'immagine non è quella di default eliminala e riinseriscila con lo stesso nome
                             echo "Il file precedente è stato eliminato con successo.";
                             if (move_uploaded_file($_FILES['image']["tmp_name"], $img)) {
                                 exit(header('Location: profile.php'));
@@ -145,7 +143,7 @@ if(isset($_REQUEST['action']) && $_REQUEST['action'] === 'addUser') {
         } 
     }
 }else if(isset($_REQUEST['action']) && $_REQUEST['action'] === 'deleteUser') {
-    deleteUser($mysqli, $_REQUEST['id'], $_REQUEST['img']);
+    deleteUser($mysqli, $_SESSION['userLogin']['id'], $_SESSION['userLogin']['img']);
     session_unset();
     exit(header('Location: login.php'));
 }

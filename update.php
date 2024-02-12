@@ -4,6 +4,10 @@
 <?php require_once 'functions.php' ?>
 
 <?php
+    session_start();
+    if(!isset($_SESSION['userLogin'])){
+        exit(header('Location: login.php'));
+    }
 
     $sql = 'SELECT libri.*, generi_letterari.nome as genere FROM libri INNER JOIN generi_letterari ON libri.genere_id = generi_letterari.id  WHERE libri.id=' . $_REQUEST['id'];
    

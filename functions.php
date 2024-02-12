@@ -20,18 +20,15 @@ function getAllBooks($mysqli){
 function createBook($mysqli, $titolo, $autore, $anno_pubb, $genere_id){
     $sql = "INSERT INTO libri (titolo, autore, anno_pubblicazione, genere_id)
         VALUES ('$titolo', '$autore', '$anno_pubb', '$genere_id')";
-
     if(!$mysqli->query($sql)) { die($mysqli->connect_error); }
-    header('Location: index.php');
+    else { echo 'Libro creato con successo!!!';}
 }
-
 // elimina libro
 function deleteBook($mysqli, $id){
     $sql = 'DELETE FROM libri WHERE id = '.$id;
     if(!$mysqli->query($sql)){ echo($mysqli->connect_error); }
     else { echo 'Libro eliminato con successo!!!';}
 }
-
 // modifica libro
 function updateBook($mysqli, $id, $titolo, $autore, $anno_pubb, $genere_id){
     $sql = "UPDATE libri SET
@@ -56,16 +53,62 @@ function getGenres($mysqli){
     }
     return $result;
 }
+// descrizione genere letterario
+function genreDescription($mysqli, $id){
+    $sql = 'SELECT * FROM generi_letterari WHERE id = ' . $id;
+    $response = $mysqli->query($sql);
+    if($response){
+        $result = $response->fetch_assoc();
+    }
+    return $result;
+}
+
 
 
 // UTENTI
 
+function getAllUsers($mysqli){
+    $sql = 'SELECT * FROM utenti';
+    $users = [];
+    $res = $mysqli->query($sql);
+    if($res) {
+        while($row = $res->fetch_assoc() ) { 
+            array_push($users, $row); 
+        }
+    }
+    return $users;
+}
 // crea utenti
 function addUser($mysqli, $nome, $cognome, $telefono, $email, $password, $img){
     $sql = "INSERT INTO utenti (nome, cognome, telefono, email, password, img)
             VALUES ('$nome', '$cognome', '$telefono', '$email', '$password', '$img')";
     if(!$mysqli->query($sql)) { die($mysqli->connect_error); }
     
+}
+// modifica dati utente
+function updateUserData($mysqli, $id, $nome, $cognome, $telefono, $email, $img){
+    $sql = "UPDATE utenti SET
+        nome = '" . $nome . "',
+        cognome = '" . $cognome . "',
+        telefono = '" . $telefono . "',
+        email = '" . $email . "',
+        img = '" . $img . "'
+        WHERE id = " . $id;
+    if(!$mysqli->query($sql)){ die($mysqli->connect_error); }
+}
+//elimina utente
+function deleteUser($mysqli, $id, $img){
+    $sql = 'DELETE FROM utenti WHERE id = '.$id;
+    if(!$mysqli->query($sql)){ die($mysqli->connect_error); }
+    else if($img !== 'usersImg/default.png'){ 
+        unlink($img)
+    ;}
+}
+
+//modifica immagine
+function updateUserImg($mysqli, $id, $img){
+    $sql = "UPDATE utenti SET img = '" . $img . "' WHERE id = " . $id;
+    if(!$mysqli->query($sql)){ die($mysqli->connect_error); }
 }
 
 // login
@@ -82,43 +125,4 @@ function login($mysqli, $email, $password) {
     } else {
         echo 'Password errata!!';
     }
-}
-
-function getAllUsers($mysqli){
-    $sql = 'SELECT * FROM utenti';
-    $users = [];
-    $res = $mysqli->query($sql);
-    if($res) {
-        while($row = $res->fetch_assoc() ) { 
-            array_push($users, $row); 
-        }
-    }
-    return $users;
-}
-
-// modifica dati utente
-function updateUserData($mysqli, $id, $nome, $cognome, $telefono, $email, $img){
-    $sql = "UPDATE utenti SET
-        nome = '" . $nome . "',
-        cognome = '" . $cognome . "',
-        telefono = '" . $telefono . "',
-        email = '" . $email . "',
-        img = '" . $img . "'
-        WHERE id = " . $id;
-    if(!$mysqli->query($sql)){ die($mysqli->connect_error); }
-}
-
-//elimina utente
-function deleteUser($mysqli, $id, $img){
-    $sql = 'DELETE FROM utenti WHERE id = '.$id;
-    if(!$mysqli->query($sql)){ die($mysqli->connect_error); }
-    else if($img !== 'usersImg/default.png'){ 
-        unlink($img)
-    ;}
-}
-
-//modifica immagine
-function updateUserImg($mysqli, $id, $img){
-    $sql = "UPDATE utenti SET img = '" . $img . "' WHERE id = " . $id;
-    if(!$mysqli->query($sql)){ die($mysqli->connect_error); }
 }

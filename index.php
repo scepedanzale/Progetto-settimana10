@@ -3,20 +3,18 @@
 <?php include_once 'functions.php' ?>
 
 <?php
-
     session_start();
     if(!isset($_SESSION['userLogin'])){
         exit(header('Location: login.php'));
     }
 ?>
 
-
 <div class="container p-3 text-center">
-
-    <button class="btn violet-bg my-3 w-50" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+    <!-- form aggiunta libro -->
+    <button class="btn violet-bg my-3 w-50" type="button" data-bs-toggle="collapse" data-bs-target="#createBookCollapse" aria-expanded="false" aria-controls="createBookCollapse">
         <span class>Aggiungi un nuovo libro</span>
     </button>
-    <div class="collapse" id="collapseExample">
+    <div class="collapse" id="createBookCollapse">
         <form action="controller.php?action=create" method="POST" class="text-center">
         <div class="input-group mb-3">
                 <input type="text" id="titolo" name="titolo" class="form-control" placeholder="titolo..." required minlength="1">
@@ -60,25 +58,20 @@
                         <img src="<?=$book['img']?>" class="card-img-top" alt="">
                         <div class="card-body">
                             <h5 class="card-title no-br"><nobr><?=$book['titolo']?></nobr></h5>
-                            <p class="card-text no-br"><nobr>Author: <?=$book['autore']?></nobr></p>
-                            <p class="card-text no-br"><nobr>Year: <?=$book['anno_pubblicazione']?></nobr></p>
-                            <p class="card-text no-br"><nobr>Genre: <?=$book['genere']?></nobr></p>
-                            <a href="controller.php?action=delete&id=<?= $book['id'] ?>" class=" my-1" role="button"><i class="bi bi-trash"></i></a>
-                            <a href="update.php?action=update&id=<?= $book['id'] ?>" class=" my-1"><i class="bi bi-pencil"></i></a>
+                            <p class="card-text no-br"><nobr>Autore: <?=$book['autore']?></nobr></p>
+                            <p class="card-text no-br"><nobr>Anno di pubblicazione: <?=$book['anno_pubblicazione']?></nobr></p>
+                            <p class="card-text no-br"><nobr><a href="genere_letterario.php?genereId=<?=$book['genere_id']?>" class="text-reset">Genere: <?=$book['genere']?></a></nobr></p>
+                            <a href="controller.php?action=delete&id=<?= $book['id'] ?>" class=" my-1" role="button"><i class="bi bi-trash"></i></a> <!-- eliminazione libro -->
+                            <a href="update.php?action=update&id=<?= $book['id'] ?>" class=" my-1"><i class="bi bi-pencil"></i></a> <!-- modifica libro -->
                         </div>
                     </div>
                 </div>
                 <?php } ?>
-            <?php } ?>
-        </div>
+        <?php } ?>
     </div>
+</div>
 
-    <?php include_once 'footer.php' ?>
-            
-            
-    
-    
-
+<?php include_once 'footer.php' ?>
 
 
 

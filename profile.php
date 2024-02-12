@@ -11,15 +11,13 @@
     $loggedUser = $_SESSION['userLogin'];
 ?>
 
-
 <div class="container-fluid my-3">
     <div class="row">
         <div class="col-12 my-3 d-flex align-items-start justify-content-between">
             <h1><?=$loggedUser['nome'].' '.$loggedUser['cognome'] ?></h1>
-
+            <!-- impostazioni profilo -->
             <div class="dropdown">
                 <i class="bi bi-gear" type="button" data-bs-toggle="dropdown" aria-expanded="false"></i>
-                
                 <ul class="dropdown-menu">
                     <li type="button" class="soft-violet-bg rounded-0 btn w-100" data-bs-toggle="modal" data-bs-target="#logoutModal"><!-- logout -->
                         Logout
@@ -53,24 +51,24 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body d-flex justify-content-center">
-                            <a href="controllerReg.php?action=deleteUser&id=<?=$loggedUser['id']?>&img=<?=$loggedUser['img']?>" type="button" class="btn green-bg w-25 me-2">si</a>
+                            <a href="controllerReg.php?action=deleteUser" type="button" class="btn green-bg w-25 me-2">si</a>
                             <a type="button" class="btn violet-bg w-25" data-bs-dismiss="modal">no</a>
                         </div>
                     </div>
                 </div>
             </div>
-            
         </div>
     </div>
-    <div class="row  px-3">
+    <!-- dati utente -->
+    <div class="row px-3">
         <div class="col-12 d-flex align-items-center justify-content-center soft-green-bg rounded-3 py-2">
             <div class="row d-flex align-items-center justify-content-center">
+                <!-- modifica immagine -->
                 <div class="col-4 col-md-2">
-                    <!-- modifica immagine -->
                     <button type="button" class="btn violet-bg my-3 w-100" data-bs-toggle="modal" data-bs-target="#userUpdateImg">
-                        <img src=<?=$loggedUser['img']?> alt="" class="w-100">
+                        <img src=<?=$loggedUser['img']?> alt="immagine profilo" class="w-100">
                     </button>
-
+                    <!-- modale modifica immagine -->
                     <div class="modal fade" id="userUpdateImg" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -79,7 +77,7 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <form action="controllerReg.php?action=updateUserImg&id=<?=$loggedUser['id']?>&userName=<?=$loggedUser['nome']?>&userSurname=<?=$loggedUser['cognome']?>&userImg=<?=$loggedUser['img']?>" method="POST" enctype="multipart/form-data" >
+                                    <form action="controllerReg.php?action=updateUserImg&userImg=<?=$loggedUser['img']?>" method="POST" enctype="multipart/form-data" >
                                         <div class="input-group">
                                             <input type="file" title="Scegli un'immgaine profilo" accept = "image/png, image/jpg, image/jpeg" name="image" class="form-control" required>
                                             <button type="submit" class="btn green-bg">Salva</button>
@@ -103,7 +101,7 @@
                             <span class>Modifica i tuoi dati</span>
                         </button>
                         <div class="collapse" id="collapseFormUpdateUser">
-                            <form action="controllerReg.php?action=updateUserData&id=<?=$loggedUser['id']?>&userName=<?=$loggedUser['nome']?>&userSurname=<?=$loggedUser['cognome']?>&userImg=<?=$loggedUser['img']?>" method="POST" class="">
+                            <form action="controllerReg.php?action=updateUserData" method="POST" class="">
                                 <div class="input-group mb-3">
                                     <div class="input-group-text">Nome</div>
                                     <input type="text" id="nome" value='<?=$loggedUser['nome']?>' name="nome" class="form-control" placeholder="nome..." required minlength="2">
@@ -147,7 +145,8 @@
                      $users = getAllUsers($mysqli);
                     if($users){
                     foreach ($users as $key => $user) { 
-                        if($user['id'] === $_SESSION['userLogin']['id']){?>
+                        /* riga utente loggato */
+                        if($user['id'] === $loggedUser['id']){?>
                             <tr class="soft-green-bg">
                                 <td><img src=<?= $user['img'] ?> width="50" ></td>
                                 <td><?= $user['nome'] ?></td>
